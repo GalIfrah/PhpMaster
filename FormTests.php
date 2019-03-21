@@ -1,33 +1,4 @@
-    <!doctype html>
-    <html lang="en" xmlns="http://www.w3.org/1999/html">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
-    </head>
-    <body>
 
-
-    <form action="FormTests.php", method="post">
-
-
-    <input type="text", placeholder="Enter Username", name="Username">
-
-    </br>  </br>
-
-    <input type="password", placeholder="Enter Password", name="Password">
-
-    </br>  </br>
-
-    <input type="checkbox", name="cookies"> accept cookies?
-
-    </br>  </br>
-
-    <input type="submit", name="submit">
-    
-    </form>
     
 
     <?php
@@ -61,37 +32,73 @@
 //
 //    }
 
+        $servername = "localhost";
+        $username = "newuser";
+        $password = "newpass";
+        $dbname = "newdb";
+
+    If(isset($_POST['submit'])){
+        try {
 
 
-    $servername = "localhost";
-    $username = "newuser";
-    $password = "newpass";
-    $dbname = "newdb";
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        // set the PDO error mode to exception
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // prepare sql and bind parameters
+            $stmt = $conn->prepare("INSERT INTO caloriesCalc (id, firstname, lastname, email, phone)
+    VALUES (:id, :firstname, :lastname, :email, :phone)");
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':phone', $phone);
 
-        // sql to create table
-        $sql = "SELECT * FROM `caloriesCalc`";
+            $id = $_POST['id'];
+            $firstname = $_POST['firstname'];
+            $lastname= $_POST['lastname'];
+            $email= $_POST['email'];
+            $phone= $_POST['phone'];
 
-        // use exec() because no results are returned
-        $results = $conn->query($sql);
-
-        if $results=>num_
+            $stmt->execute();
+            echo "New records created successfully";
+        }catch(PDOException $e){
+            echo "Error: " . $e->getMessage();
+        }
+        $conn = null;
     }
-    catch(PDOException $e)
-    {
-        echo $sql . "<br>" . $e->getMessage();
-    }
 
-    $conn = null;
+//    $servername = "localhost";
+//    $username = "newuser";
+//    $password = "newpass";
+//    $dbname = "newdb";
+//
+//
+//    try {
+//        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+//        // set the PDO error mode to exception
+//        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//
+//        // sql to create table
+//        $sql = "SELECT * FROM caloriesCalc WHERE id = 1";
+//
+//        $stmt = $conn->query($sql);
+//
+//        $stmt->execute();
+//        // use exec() because no results are returned
+//        $results = $stmt->fetch();
+//
+//
+//        $email = $results["email"];
+//
+//        echo $email;
+//    }
+//    catch(PDOException $e)
+//    {
+//        echo $sql . "<br>" . $e->getMessage();
+//    }
+//
+//    $conn = null;
 
     ?>
-
-    </body>
-    </html>
-
-
